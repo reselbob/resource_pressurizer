@@ -18,12 +18,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const port = process.env.SERVER_PORT || 8080;
 
+let omitCpu = false;
+let omitNetwork = false;
+
+if(typeof process.env.OMIT_CPU === 'string'){
+    omitCpu = process.env.OMIT_CPU.toLowerCase()  === 'true';
+};
+
+if(typeof process.env.OMIT_NETWORK === 'string'){
+    omitCpu = process.env.OMIT_NETWORK.toLowerCase()  === 'true';
+};
+
+
+const promises = [];
+
+if(!omitCpu)promises.push(pressureCpu());
+if(!omitNetwork)promises.push(pressureNetwork());
+
+
 let promiseExecution = async () => {
-    let promise = await Promise.all([
-        pressureNetwork(),
-        pressureCpu(),
-    ]);
-    console.log(promise);
+    logger.info('Adding promises')
+    let promise = await Promise.all(promises);
 };
 
 server = app.listen(port, () => {
