@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require("path");
@@ -6,7 +7,6 @@ const {pressureNetwork} = require('./pressurizers/network');
 const {pressureCpu} = require('./pressurizers/cpu')
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

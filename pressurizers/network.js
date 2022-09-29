@@ -1,6 +1,8 @@
 const {logger} = require('../logger');
 const axios = require('axios');
+const fs = require('fs');
 const pressurizeNetwork = async ()=> {
+    const outputFilename = 'outputNetwork.txt'
     const milliSecs = 50;
     async function callApi() {
         const url = `https://api.publicapis.org/entries`;
@@ -17,7 +19,12 @@ const pressurizeNetwork = async ()=> {
             method: 'get',
             headers: config.headers
         });
-        logger.info(`Received from ${url}: ${JSON.stringify(response.data)}` )
+        const msg = `Received from ${url}: ${JSON.stringify(response.data)}`
+        logger.info(msg)
+        await fs.promises.appendFile(outputFilename, msg)
+            .catch(e => {
+                logger.error(e.message)
+            })
     }
 
     for(;;){
