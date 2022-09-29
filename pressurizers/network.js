@@ -22,8 +22,12 @@ const pressurizeNetwork = async ()=> {
             logger.error(e.message);
         });
         let msg =`No data received from ${url}`
-        if(response.data){
-            msg = `Received from ${url}: ${JSON.stringify(response.data)}`
+        try {
+            if (response.data) {
+                msg = `Received from ${url}: ${JSON.stringify(response.data)}`
+            }
+        } catch (e) {
+            logger.error(e.message)
         }
         logger.info(msg)
         await fs.promises.appendFile(outputFilename, msg)
