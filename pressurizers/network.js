@@ -18,6 +18,8 @@ const pressurizeNetwork = async ()=> {
             url: url,
             method: 'get',
             headers: config.headers
+        }).catch(e => {
+            logger.error(e.message);
         });
         const msg = `Received from ${url}: ${JSON.stringify(response.data)}`
         logger.info(msg)
